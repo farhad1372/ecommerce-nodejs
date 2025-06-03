@@ -3,6 +3,7 @@ import BaseController from "@controllers/controller";
 import TestController from "@controllers/TestController.js";
 import UserProductController from "@controllers/product/UserProduct.controller.js";
 import UserProductReviewController from "@controllers/product/UserProductReview.controller.js";
+import UserProductSummaryController from "@controllers/product/UserProductSummary.controller.js";
 
 
 const SiteRoutes = (app: Application, express: any) => {
@@ -21,7 +22,7 @@ const SiteRoutes = (app: Application, express: any) => {
     Router.post("/products/:id/reviews", UserProductReviewController.store);
 
     //* Summary
-    Router.post("/ai/summary", TestController.show);
+    Router.post("/ai/summary", UserProductSummaryController.index);
 
 
 
