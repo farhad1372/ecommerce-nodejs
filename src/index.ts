@@ -10,6 +10,7 @@ import { ExtendResponse } from "./providers/response/index.js";
 import { ExtendRequest } from "./providers/request/index.js";
 import SiteRoutes from "./routes/site.js";
 import { SupabaseService } from "@services/supabase.js";
+import { errorHandler } from "./webserver/errors.js";
 // * Base Configuration
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -49,10 +50,9 @@ ExtendResponse(app);
 UserRoutes(app, express);
 SiteRoutes(app, express);
 
-
-
-
-
 app.listen(PORT, () => {
     console.log('\x1b[47m', `Express server listening on ${HOST}:${PORT}, in ${app.get('env').toUpperCase()} mode`, '\x1b[0m');
 });
+
+//* Error Handler must be last app.use();
+errorHandler(app);
