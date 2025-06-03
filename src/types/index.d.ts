@@ -1,7 +1,9 @@
+import { SupabaseService } from "../services/supabase.js";
 import ExtendAuthorizationHeader from "../providers/request/authorizationHeader";
 import { IFileResponse } from "../providers/response/file.js";
 import { IJsonResponse } from "../providers/response/json";
 import { IViewResponseProvider } from "../providers/response/view.js";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 declare global {
   namespace NodeJS {
@@ -21,8 +23,9 @@ declare global {
       View: IViewResponseProvider
     }
 
-
-
-
+    interface Application {
+      get(key: 'supabase'): SupabaseClient;
+      set(key: 'supabase', value: SupabaseClient): void;
+    }
   }
 }
