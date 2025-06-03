@@ -9,6 +9,7 @@ import UserRoutes from "./routes/user.js";
 import { ExtendResponse } from "./providers/response/index.js";
 import { ExtendRequest } from "./providers/request/index.js";
 import SiteRoutes from "./routes/site.js";
+import { SupabaseService } from "@services/supabase.js";
 // * Base Configuration
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -32,9 +33,12 @@ expressConfig(app, express);
 
 
 
-// * DB Connection
+// * DB Connection (sequelize + supabase)
 const sequelizeService = new SequelizeDatabaseService();
 await sequelizeService.connect();
+
+const supabaseService = new SupabaseService();
+supabaseService.connect(app);
 
 
 //* Route Providers
