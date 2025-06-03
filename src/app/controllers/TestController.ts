@@ -3,6 +3,7 @@ import User from "@models/user";
 import { NOW } from "sequelize";
 import BaseController from "./controller.js";
 import UserCommentValidator from "../validators/comment/user.js";
+// import { SupabaseService } from "@services/supabase.js";
 
 
 class TestController extends BaseController {
@@ -12,8 +13,21 @@ class TestController extends BaseController {
         try {
             const { id } = request.params;
 
-            const validation = UserCommentValidator.create(request);
-            if (validation.fails) return response.Json.validationError(validation.errors);
+
+            const data = await request.app.get('supabase')
+                .from('products')
+                .select(`*, product_attributes (id, type, value)`)
+                .eq('id', 50)
+                .single();
+
+            if (data?.error) return response.Json.internalError(data?.error);
+
+            console.log("data", data?.error);
+            return response.send(data?.data);
+
+
+            // const validation = UserCommentValidator.create(request);
+            // if (validation.fails) return response.Json.validationError(validation.errors);
 
 
 
@@ -24,6 +38,7 @@ class TestController extends BaseController {
 
             response.send("done");
         } catch (error) {
+            console.log("Err", error);
             response.send(error)
         }
     }
