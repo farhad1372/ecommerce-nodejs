@@ -31,12 +31,9 @@ app.engine('html', mustacheExpress());
 //* Express Config
 expressConfig(app, express);
 
-
-
-
 // * DB Connection (sequelize + supabase)
-const sequelizeService = new SequelizeDatabaseService();
-await sequelizeService.connect();
+// const sequelizeService = new SequelizeDatabaseService();
+// await sequelizeService.connect();
 
 const supabaseService = new SupabaseService();
 supabaseService.connect(app);
