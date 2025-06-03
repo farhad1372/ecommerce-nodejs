@@ -4,6 +4,8 @@ namespace NodeJS {
 		// applications
 		PORT: string;
 		SERVER_HTTP_REQUEST_TIMEOUT_IN_SEC: string;
+		// OPEN AI
+		OPENAI_API_KEY: string;
 		// sequelize
 		SEQUELIZE_DB_NAME: string;
 		SEQUELIZE_DB_USER: string;
