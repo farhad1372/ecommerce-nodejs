@@ -1,4 +1,6 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import SupabaseConfig from '@config/supabase.js';
+import { Application } from 'express';
 
 /**
  * Interface for Supabase configuration
@@ -11,15 +13,24 @@ interface SupabaseConfig {
 /**
  * SupabaseService manages the Supabase client connection
  */
-class SupabaseService {
-    private client: SupabaseClient;
+export class SupabaseService {
+    private client: SupabaseClient | undefined;
 
-    /**
-     * Initializes Supabase client with provided configuration
-     * @param config - Supabase configuration
-     */
-    constructor(config: SupabaseConfig) {
-        this.client = createClient(config.url, config.anonKey);
+
+
+    connect(app: Application) {
+        const config: SupabaseConfig = {
+            url: SupabaseConfig.url,
+            anonKey: SupabaseConfig.anonKey,
+        };
+
+        if (!config.url || !config.anonKey) {
+            throw new Error('Supabase configuration is incomplete. Check environment variables.');
+        }
+        const client = createClient(config.url, config.anonKey);
+        app.set("supabase", client);
+        this.client = client;
+        console.log('\x1b[46m', 'Supabase connection established successfully.', '\x1b[0m');
     }
 
     /**
@@ -27,25 +38,9 @@ class SupabaseService {
      * @returns SupabaseClient
      */
     getClient(): SupabaseClient {
-        return this.client;
+        return this.client as SupabaseClient;
     }
 }
 
-/**
- * Factory function to create a Supabase service instance
- * @returns SupabaseService instance
- */
-function createSupabaseService(): SupabaseService {
-    const config: SupabaseConfig = {
-        url: process.env.SUPABASE_URL || '',
-        anonKey: process.env.SUPABASE_ANON_KEY || '',
-    };
-
-    if (!config.url || !config.anonKey) {
-        throw new Error('Supabase configuration is incomplete. Check environment variables.');
-    }
-
-    return new SupabaseService(config);
-}
-
-export { SupabaseService, createSupabaseService };
+const supabaseService = new SupabaseService();
+export const supabase = supabaseService.getClient();
