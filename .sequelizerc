@@ -1,0 +1,9 @@
+const path = require('path');
+// require('ts-node/register'); // اضافه کردن ts-node
+
+module.exports = {
+	config: path.resolve('config', 'sequelize-cmd.js'),
+	'models-path': path.resolve('app/models', 'sequelize'),
+	'seeders-path': path.resolve('database/sequelize', 'seeders'),
+	'migrations-path': path.resolve('database/sequelize', 'migrations'),
+};
