@@ -13,9 +13,15 @@ class UserProductController extends BaseController {
             if (validation.fails) return response.Json.validationError(validation.errors);
 
 
+            // const data = await request.app.get('supabase')
+            //     .from('products')
+            //     .select(`*, attributes (id, type, value)`)
+            //     .eq('id', id)
+            //     .single();
+
             const data = await request.app.get('supabase')
                 .from('products')
-                .select(`*, product_attributes (id, type, value)`)
+                .select(`*, attributes!product_attributes_product_id_fkey ( id, value, type), product_attributes!product_attributes_product_id_fkey1 ( id, attribute_ids, price)`)
                 .eq('id', id)
                 .single();
 
@@ -27,66 +33,6 @@ class UserProductController extends BaseController {
             response.Json.internalError(error)
         }
     }
-
-    public async reviews(request: Request, response: Response) {
-        try {
-            const { id } = request.params;
-            const { page, limit } = request.query;
-
-            const _page = page ? parseInt(page as string) : 1;
-            const _limit = limit ? parseInt(limit as string) : 10;
-            const _start = (_page - 1) * _limit;
-            const _end = _start + _limit - 1;
-
-            const validation = UserProductValidator.showPreviews(request);
-            if (validation.fails) return response.Json.validationError(validation.errors);
-
-
-            const data = await request.app.get('supabase')
-                .from('reviews')
-                .select('*', { count: 'exact' })
-                .eq('product_id', id)
-                .range(_start, _end)
-                .order('id', { ascending: false });
-
-            if (data?.error) return response.Json.internalError(data?.error);
-            return response.Json.successful("", data);
-        } catch (e) {
-            response.Json.internalError(e);
-        }
-    }
-
-
-    public async storeReview(request: Request, response: Response) {
-        try {
-            const { id } = request.params;
-            const { page, limit } = request.query;
-
-            const _page = page ? parseInt(page as string) : 1;
-            const _limit = limit ? parseInt(limit as string) : 10;
-            const _start = (_page - 1) * _limit;
-            const _end = _start + _limit - 1;
-
-            const validation = UserProductValidator.showPreviews(request);
-            if (validation.fails) return response.Json.validationError(validation.errors);
-
-
-            const data = await request.app.get('supabase')
-                .from('reviews')
-                .select('*', { count: 'exact' })
-                .eq('product_id', id)
-                .range(_start, _end)
-                .order('id', { ascending: false });
-
-            if (data?.error) return response.Json.internalError(data?.error);
-            return response.Json.successful("", data);
-        } catch (e) {
-            response.Json.internalError(e);
-        }
-    }
-
-
-
 }
 
 

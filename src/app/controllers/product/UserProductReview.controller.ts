@@ -16,7 +16,7 @@ class UserProductReviewController extends BaseController {
             const _start = (_page - 1) * _limit;
             const _end = _start + _limit - 1;
 
-            const validation = UserProductValidator.showPreviews(request);
+            const validation = UserProductValidator.showReviews(request);
             if (validation.fails) return response.Json.validationError(validation.errors);
 
 
@@ -37,27 +37,27 @@ class UserProductReviewController extends BaseController {
 
     public async store(request: Request, response: Response) {
         try {
-            const { id } = request.params;
-            const { page, limit } = request.query;
+            const { id } = request.params; //* product_id
+            const { full_name, rate, content } = request.body;
 
-            const _page = page ? parseInt(page as string) : 1;
-            const _limit = limit ? parseInt(limit as string) : 10;
-            const _start = (_page - 1) * _limit;
-            const _end = _start + _limit - 1;
-
-            const validation = UserProductValidator.showPreviews(request);
+            const validation = UserProductValidator.storeReviews(request);
             if (validation.fails) return response.Json.validationError(validation.errors);
 
 
             const data = await request.app.get('supabase')
                 .from('reviews')
-                .select('*', { count: 'exact' })
-                .eq('product_id', id)
-                .range(_start, _end)
-                .order('id', { ascending: false });
+                .insert({
+                    full_name,
+                    product_id: parseInt(id),
+                    rate,
+                    content,
+                })
+                .select('id, product_id, rate, content, full_name, created_at')
+                .single();
 
             if (data?.error) return response.Json.internalError(data?.error);
             return response.Json.successful("", data);
+
         } catch (e) {
             response.Json.internalError(e);
         }
