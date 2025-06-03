@@ -1,6 +1,7 @@
+import { Application, Router } from "express";
 import BaseController from "@controllers/controller";
 import TestController from "@controllers/TestController.js";
-import { Application, Router } from "express";
+import UserProductController from "@controllers/product/UserProductController.js";
 
 
 const SiteRoutes = (app: Application, express: any) => {
@@ -12,7 +13,11 @@ const SiteRoutes = (app: Application, express: any) => {
 
 
 
-    Router.get("/products/:id", TestController.show);
+    Router.get("/products/:id", UserProductController.show);
+    Router.get("/products/:id/reviews", UserProductController.reviews);
+    Router.post("/products/:id/reviews", UserProductController.storeReview);
+
+
 
 
 
