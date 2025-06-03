@@ -16,8 +16,8 @@ class TestController extends BaseController {
 
             const data = await request.app.get('supabase')
                 .from('products')
-                .select(`*, product_attributes (id, type, value)`)
-                .eq('id', 50)
+                .select(`*, attributes!product_attributes_product_id_fkey ( id, value, type), product_attributes!product_attributes_product_id_fkey1 ( id, attribute_ids, price)`)
+                .eq('id', id)
                 .single();
 
             if (data?.error) return response.Json.internalError(data?.error);
