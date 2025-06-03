@@ -35,7 +35,6 @@ class JsonResponse implements IJsonResponse {
 	}
 
 	validationError(errors: object | Array<object>, message?: string) {
-		console.log("err isisisisisisis oooo ", errors)
 		return this.$response.status(422).json({ errors, message: message || "Please check inputs" });
 	}
 
