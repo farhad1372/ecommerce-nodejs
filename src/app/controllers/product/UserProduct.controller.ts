@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
-import User from "@models/user";
-import { NOW } from "sequelize";
 import BaseController from "../controller.js";
 import UserProductValidator from "@validators/product/user.js";
-// import { SupabaseService } from "@services/supabase.js";
 
 
 class UserProductController extends BaseController {
