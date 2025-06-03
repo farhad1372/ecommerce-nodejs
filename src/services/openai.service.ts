@@ -1,5 +1,6 @@
 
 import OpenAI from 'openai';
+import openAIConfig from '@config/openai.js';
 
 export class OpenAIService {
     private openai: OpenAI;
@@ -11,14 +12,18 @@ export class OpenAIService {
         });
     }
 
-    async summarizeText(text: string): Promise<{ fails: boolean, message: string }> {
+    async summarizeText(product_data: { [key: string]: any }): Promise<{ fails: boolean, message: string }> {
         try {
+            console.log("product_data", product_data)
             const response = await this.openai.chat.completions.create({
                 model: 'gpt-4o-mini',
-                messages: [{ role: 'user', content: `Summarize this text: ${text}` }],
+                messages: [{
+                    role: 'user',
+                    content: `${openAIConfig.summary_product_prompt} ${JSON.stringify(product_data)}`
+                }],
                 max_tokens: 150,
             });
-            if (!response?.choices?.[0]?.message?.content) return { fails: true, message: 'Failed to summarize text' };
+            if (!response?.choices?.[0]?.message?.content) return { fails: true, message: 'Failed to summarize info' };
             return {
                 fails: false,
                 message: response.choices[0].message.content.trim()
@@ -31,20 +36,20 @@ export class OpenAIService {
         }
     }
 
-    async analyzeReviews(reviews: { comment: string; rating: number }[]): Promise<{ fails: boolean, message: string }> {
+    async analyzeReviews(reviews: { content: string; rate: number, full_name: string, created_at: string }[]): Promise<{ fails: boolean, message: string }> {
         try {
-            const reviewText = reviews.map(r => `Rating: ${r.rating}, Comment: ${r.comment}`).join('\n');
+
             const response = await this.openai.chat.completions.create({
                 model: 'gpt-4o-mini',
                 messages: [{
                     role: 'user',
-                    content: `Analyze and summarize these reviews:\n${reviewText}\nProvide a concise summary and overall sentiment (positive, neutral, negative).`
+                    content: `${openAIConfig.summary_review_prompt} ${JSON.stringify(reviews)}`
                 }],
                 max_tokens: 200,
             });
             if (!response?.choices?.[0]?.message?.content) return { fails: true, message: 'Failed to summarize text' };
             return {
-                fails: true,
+                fails: false,
                 message: response.choices[0].message.content.trim()
             }
         } catch (e) {
