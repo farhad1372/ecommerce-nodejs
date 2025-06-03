@@ -6,15 +6,16 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-// import dotenv from 'dotenv';
 import corsConfig from '../config/cors.js';
 import cookieSession from 'cookie-session';
 import timeout from 'connect-timeout';
 import appConfig from '@config/app.js';
 import ServerTimedOut from '@middleware/serverTimeout.js';
 import Trimmer from '@middleware/trimmer.js';
-debug('web:server');
+import { rateLimit } from 'express-rate-limit'
+// import dotenv from 'dotenv';
 // dotenv.config();
+debug('web:server');
 
 export default function (app: Application, express: any) {
 
@@ -32,21 +33,6 @@ export default function (app: Application, express: any) {
     };
 
     app.use(cors(corsOptions));
-
-
-    // cookie session, also used for Google-Auth
-    // app.use(Session({
-    // 	secret: asdhqpnv123102u!!!!v$%^^cbjasdho344234",
-    // 	resave: false,
-    // 	saveUninitialized: false,
-    // 	proxy: true,  // this is optional it depend which server you host, i am not sure about Heroku if you need it or not
-    // 	cookie: {
-    // 		secure: "auto",  // this will set to false on developement, but true on Heroku since is https so this setting is required
-    // 		maxAge: 10000, // 10 sec for testing
-    // 		sameSite: "none", //by default in developement this is false if you're in developement mode
-    // 		httpOnly: false,
-    // 	},
-    // }))
 
     app.use(cookieSession({
         secret: "asdasda12312",
@@ -72,6 +58,15 @@ export default function (app: Application, express: any) {
     }));
     app.use(cookieParser());
     app.use(morgan('combined'));
+
+
+    const limiter = rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+        standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+        legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+    });
+    app.use(limiter)
 
 
 
