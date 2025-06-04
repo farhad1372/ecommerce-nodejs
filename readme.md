@@ -21,32 +21,23 @@
 - **Middleware**: Authentication, error handling, validation
 - **Environment Configuration**: Multi-stage support
 
-
-### Folder Structure
-- src/
-├── app
-|   ├── controllers/      
-|   ├── middlewares/
-|   ├── Validators/
-|   
-├── config/
-│   ├── supabase.ts       # DB client
-│   ├── cors.ts           # CORS settings
-│   └── openai.ts         # OpenAI
-│   ├── auth.ts           # Auth checks
-│   ├── error.ts          # Error handler
-│   └── validate.ts       # Request validation
-├── public/               # public files
-├── services/             # Services
-|   ├── openai.ts     
-|   ├── database.ts
-|   ├── supabase.ts
-  
-
 ### Acknowledgements
 -   Expressjs
 -   Typescript
--   Sequelize or Mongo
+-   Supabase
+
+### OpenAI Configuration
+  The config/openai directory contains customizable prompt templates for OpenAI interactions. You can modify these prompts to suit your specific needs.
+  eg:
+  summary_product_prompt: `You are provided with the full product data in JSON format, Your task is to generate a concise summary that includes:
+                            - The product name.
+                            - A brief summary of the description.
+                            - The available attribute types (e.g., color, size) and their values.
+                            - The price combinations from product_attributes, mapping attribute_ids to their corresponding values and prices.
+                            Keep the summary short, clear, and structured, suitable for display on a product page.
+                            you may get data in stringified json format! but you must pars it to json format.
+                            just return a clean text(without html symbols or any other thing), witch means translate colors, size, and so on, and do not mention about ids!.
+                            Here is the product data: `
 
 ## Run Locally
 
