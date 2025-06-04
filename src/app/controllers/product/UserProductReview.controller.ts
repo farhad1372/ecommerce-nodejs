@@ -8,6 +8,8 @@ class UserProductReviewController extends BaseController {
 
     public async show(request: Request, response: Response) {
         try {
+
+
             const { id } = request.params;
             const { page, limit } = request.query;
 
@@ -24,12 +26,16 @@ class UserProductReviewController extends BaseController {
                 .from('reviews')
                 .select('*', { count: 'exact' })
                 .eq('product_id', id)
+                .eq('status', 'approve')
                 .range(_start, _end)
                 .order('id', { ascending: false });
+
+            console.log("data", data?.error);
 
             if (data?.error) return response.Json.internalError(data?.error);
             return response.Json.successful("", data);
         } catch (e) {
+            console.log("E", e);
             response.Json.internalError(e);
         }
     }
@@ -43,7 +49,12 @@ class UserProductReviewController extends BaseController {
             const validation = UserProductValidator.storeReviews(request);
             if (validation.fails) return response.Json.validationError(validation.errors);
 
-
+            console.log("here is !!!", {
+                full_name,
+                product_id: parseInt(id),
+                rate,
+                content,
+            })
             const data = await request.app.get('supabase')
                 .from('reviews')
                 .insert({
@@ -51,14 +62,17 @@ class UserProductReviewController extends BaseController {
                     product_id: parseInt(id),
                     rate,
                     content,
+                    status: "pending"
                 })
-                .select('id, product_id, rate, content, full_name, created_at')
+                .select('*')
                 .single();
 
+            console.log("data", data);
             if (data?.error) return response.Json.internalError(data?.error);
             return response.Json.successful("", data);
 
         } catch (e) {
+            console.log("E", e);
             response.Json.internalError(e);
         }
     }
