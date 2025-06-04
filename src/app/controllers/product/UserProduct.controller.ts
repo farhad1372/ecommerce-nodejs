@@ -6,6 +6,20 @@ import UserProductValidator from "@validators/product/user.js";
 class UserProductController extends BaseController {
 
 
+    public async index(request: Request, response: Response) {
+        try {
+             const data = await request.app.get('supabase')
+                .from('products')
+                .select('*')
+
+            if (data?.error) return response.Json.internalError(data?.error);
+            return response.Json.successful("", data);
+
+        } catch (e) {
+            response.Json.internalError(e)
+        }
+    }
+
     public async show(request: Request, response: Response) {
         try {
             const { id } = request.params;

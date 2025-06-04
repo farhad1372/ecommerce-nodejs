@@ -15,6 +15,7 @@ const SiteRoutes = (app: Application, express: any) => {
 
 
     //* Products
+    Router.get("/products", UserProductController.index);
     Router.get("/products/:id", UserProductController.show);
 
     //* Products-Reviews

@@ -30,7 +30,6 @@ class UserProductReviewController extends BaseController {
                 .range(_start, _end)
                 .order('id', { ascending: false });
 
-            console.log("data", data?.error);
 
             if (data?.error) return response.Json.internalError(data?.error);
             return response.Json.successful("", data);
