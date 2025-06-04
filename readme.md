@@ -1,4 +1,4 @@
-# Next.js + TypeScript + Supabase Backend API
+# Expressjs + TypeScript + Supabase Backend API
 
 ![Next.js](https://img.shields.io/badge/Next.js-13+-black?style=flat&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5+-3178C6?style=flat&logo=typescript)
@@ -9,6 +9,7 @@
 - **Framework**: Expressjs
 - **Language**: TypeScript 5+
 - **Database**: Supabase (PostgreSQL)
+- **LLM**: OpenAI
 
 ### Security
 - **CORS**: Configurable origins
@@ -44,19 +45,28 @@
 Clone the project
 
 ```bash
-  git clone "rep-url"
+  git clone "https://github.com/farhad1372/ecommerce-nodejs"
 ```
 
 Go to the project directory
 
 ```bash
-  cd "project-dir"
+  cd "ecommerce-nodejs"
 ```
 
 Install dependencies
 
 ```bash
   npm install
+```
+
+ENV
+
+```bash
+  SUPABASE_PROJECT_URL=""
+  SUPABASE_DB_PASS=""
+  SUPABASE_ANON_KEY=""
+  OPENAI_API_KEY=""
 ```
 
 Start the server
