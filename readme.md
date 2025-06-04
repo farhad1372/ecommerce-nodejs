@@ -1,4 +1,4 @@
-# Next.js + TypeScript + Supabase Backend API
+# Expressjs + TypeScript + Supabase Backend API
 
 ![Next.js](https://img.shields.io/badge/Next.js-13+-black?style=flat&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5+-3178C6?style=flat&logo=typescript)
