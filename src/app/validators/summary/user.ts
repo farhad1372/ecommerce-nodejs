@@ -18,7 +18,7 @@ const UserSummaryValidator = {
                 product_id: z.number({ required_error: 'PRODUCT_ID is required', invalid_type_error: 'PRODUCT_ID must be a number' })
             });
 
-            const validatedId = summarySchema.parse({ product_id: Number(req.query.product_id), section: req.query.section });
+            const validatedId = summarySchema.parse({ product_id: Number(req.body.product_id), section: req.body.section });
 
             return {
                 fails: false,

@@ -10,7 +10,7 @@ class UserProductSummaryController extends BaseController {
     public async index(request: Request, response: Response) {
         try {
 
-            const { product_id, section } = request.query;
+            const { product_id, section } = request.body;
 
             //* Validation
             const validation = UserSummaryValidator.show(request);
